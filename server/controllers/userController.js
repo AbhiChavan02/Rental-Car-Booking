@@ -6,8 +6,8 @@ import jwt from 'jsonwebtoken'
 
 // Generate JWT token
 const generateToken = (userId) => {
-    console.log('JWT_SECRET:', process.env.JWT_SECRET); // Check if it prints "secret@2025"
-    return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '30d' });
+    const payload = userId;
+    return jwt.sign(payload, process.env.JWT_SECRET)
 };
 
 
@@ -50,6 +50,17 @@ export const loginUser = async (req, res)=>{
         res.json({success: true, token})
     } catch (error)  {
         console.log(error.message)
+        res.json({success: false, message: error.message})
+    }
+}
+
+// Get User data using Token (JWT)
+export const getUserData = async (req, res) => {
+    try {
+        const {user} = req;
+        res.json({success: true, user})
+    } catch (error) {
+        console.log(error.message);
         res.json({success: false, message: error.message})
     }
 }
