@@ -59,6 +59,19 @@ export const createBooking = async (req, res)=>{
         await Booking.create({car, owner: carData.owner, user: _id, pickupDate, returnDate, price})
 
         res.json({success: true, message: "Booking Created"})
+        
+    } catch (error) {
+        console.log(error.message)
+        res.json({success: false, message: error.message})
+    }
+}
+
+export const getUserBookings = async (req,res)=>{
+    try {
+        const {_id} = req.user;
+        const bookings = await Booking.find({user: _id}).populate("car").sort
+        ({createdAt: -1})
+        res.json({success: true, bookings})
     } catch (error) {
         console.log(error.message)
         res.json({success: false, message: error.message})
